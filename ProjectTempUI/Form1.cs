@@ -36,8 +36,11 @@ namespace ProjectTempUI
             IO_Global.SubmitPressed = new Task(() => { });
             TextInput.Clear();
 
-            //just added this stuff to here to try to get rid of extra button. 
-            //might work? 
+            //this used to be a separate button, but one button seems to be a smoother UX. 
+            //for efficiency I should have some sort of 
+            //filter that tells this if to do the top part or bottom and 
+            //not just always fire both. 
+           
             IO_Global.UiChangedCollection = TableViewer.DataSource;
             IO_Global.NextPressed.Start();
             IO_Global.NextPressed = new Task(() => { });

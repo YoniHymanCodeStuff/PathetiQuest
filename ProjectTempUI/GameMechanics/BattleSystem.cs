@@ -68,9 +68,9 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
-        class BLoopInfo // this contains the info for a battle loop. 
+        class BLoopInfo // this contains the data for a battle loop. 
         {
-            public Dictionary<Unit, Ability> FighterMovePairs = new Dictionary<Unit, Ability>();
+            public List<KeyValuePair<Unit, Ability>> FighterMovePairs = new List<KeyValuePair<Unit, Ability>>();
 
             public Dictionary<Hero, List<Ability>> SingleTargets = new Dictionary<Hero, List<Ability>>();
 
@@ -91,8 +91,7 @@ namespace ProjectTempUI.GameMechanics
 
         private static async Task BattleLoop()
         {
-
-            
+                        
             //var gs = CurrentGameState.GetInstance();
 
             DeadHeroes = new List<Hero>();
@@ -118,7 +117,7 @@ namespace ProjectTempUI.GameMechanics
                     if (h.HP > 0)
                     {
                         Ability attack = await GetHeroAttack(h);
-                        bl.FighterMovePairs.Add(h, attack);
+                        bl.FighterMovePairs.Add(new KeyValuePair<Unit, Ability>(h, attack));
                     }
                 }
                 foreach (EnemyType e in Enemies)
@@ -127,14 +126,14 @@ namespace ProjectTempUI.GameMechanics
                     {
 
                         Ability attack = GetEnemyAttack(e);
-                        bl.FighterMovePairs.Add(e, attack);
+                        bl.FighterMovePairs.Add(new KeyValuePair<Unit, Ability>(e, attack));
                     }
                 }
 
-
+                
 
                 //sort the attacks so fastest goes first:
-                bl.FighterMovePairs.OrderByDescending(x => x.Key.Speed);
+                bl.FighterMovePairs = bl.FighterMovePairs.OrderByDescending(x => x.Key.Speed).ToList();
 
 
 
@@ -167,6 +166,7 @@ namespace ProjectTempUI.GameMechanics
 
             }
 
+            await io.io.GetNextCommand();
             
             if (Heroes.Count == 0)
             {
@@ -183,11 +183,12 @@ namespace ProjectTempUI.GameMechanics
         private static async Task Inheritance()
         {
             //this deals with removing dead heroes from the main collection after the battle and transfers their items. 
+            io.io.ClearScreen();
             var gs = CurrentGameState.GetInstance();
 
             foreach (var h in DeadHeroes)
             {
-                await io.io.DisplayText($"We Avenge our fallen comrade {h.ProperName} the {h.ClassName}. The items that he was holding have been returned to your inventory, and his soul has been returned to the binary code from whence it came. ");
+                await io.io.DisplayText($"We will Avenge our fallen comrade {h.ProperName} the {h.ClassName}. The items that he was holding have been returned to your inventory, and his soul has been returned to the binary code from whence it came. ");
                 foreach (var item in h.EquippedItem)
                 {
                     gs.CurrentPlayer.InventoryItem.Add(item);
@@ -330,7 +331,14 @@ namespace ProjectTempUI.GameMechanics
             //apply mana cost:
             caster.Mana -= ability.Manacost;
 
+            //accuracy 
+            double successchance = 75 + (caster.Accuracy * 0.25);
             
+
+            //bc I forgot to add accuracy till later, I am not reworking this whole thing
+            //now and the round summary messages will be slightly innacurate in regard to accuracy... 
+            //kind of ok since this battle system needs a major overhaul to actually be somewhat fun... 
+                    
 
             //logging the data to use in message:
             if (bl.CurrentTargetisEnemy)
@@ -370,8 +378,8 @@ namespace ProjectTempUI.GameMechanics
             {
 
                 
-                //do not apply to dead units: 
-                if (target.HP <= 0)
+                //do not apply to dead units or when attack "misses" (applying accuracy): 
+                if (target.HP <= 0 || rnd.Next(1, 101) > successchance)
                 {
                     continue;
                 }
@@ -454,10 +462,10 @@ namespace ProjectTempUI.GameMechanics
             //filter out dead things. (the lists get cleansed only at the end of each round) 
             PotentialTargets = PotentialTargets.Where(x => x.HP > 0).ToList();
 
-            //pick single target with lowest health. yes, this is my whole AI logic... 
+            //pick single target with lowest health. yes, this is currently my whole AI logic... 
             if (!ability.AOE)
             {
-                PotentialTargets.OrderBy(x => x.HP);
+                PotentialTargets = PotentialTargets.OrderBy(x => x.HP).ToList();
                 Unit temp = PotentialTargets[0];
                 PotentialTargets = new List<Unit> { temp };
 

@@ -33,19 +33,29 @@ namespace ProjectTempUI.EF.DataAccess.RepositoryImplementation
             List<Item> allitems =
                GameContext.Items
               .Where(x => (x.IsArchetype == true))
-              
+
               .ToList();
 
             int randchoice = rnd.Next(allitems.Count());
 
-            Item chosentype =  allitems[randchoice];
+            Item chosentype = allitems[randchoice];
 
-            Item newI = new Item {
+            Item newI = new Item
+            {
                 Name = chosentype.Name,
                 Description = chosentype.Description,
-                HP_Bonus = chosentype.HP_Bonus,
                 Active = chosentype.Active,
-                IsArchetype = false
+                IsArchetype = false,
+
+                HP_Bonus = chosentype.HP_Bonus,
+                Mana_Bonus = chosentype.Mana_Bonus,
+                Magic_Resistance_Bonus = chosentype.Magic_Resistance_Bonus,
+                Armor_Bonus = chosentype.Armor_Bonus,
+                Spell_Power_Bonus = chosentype.Spell_Power_Bonus,
+                Strength_Bonus = chosentype.Strength_Bonus,
+                Speed_Bonus = chosentype.Speed_Bonus,
+                Accuracy_Bonus = chosentype.Accuracy_Bonus,
+
             };
 
             return newI;

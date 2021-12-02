@@ -37,8 +37,7 @@ namespace ProjectTempUI.GameMechanics
                         gs.uow.Heroes.Reload(h);
                     }
 
-                    //List<int> ids = gs.CurrentPlayer.Heroes.Select(x => x.Id).ToList();
-
+                    
                     gs.uow.Players.Reload(gs.CurrentPlayer);
                                                             
                     await InGameMenu.MainMenu();
@@ -64,9 +63,7 @@ namespace ProjectTempUI.GameMechanics
 
         public static async Task Victory(List<EnemyType> defeatedEn)
         {
-
-            var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
-
+                        
             io.io.ClearScreen();
             await io.io.DisplayText("Victory!");
 
@@ -145,12 +142,28 @@ namespace ProjectTempUI.GameMechanics
             //you learn a new ability every 5th level. 
             if (h.Level%5==0)
             {
+                if (h.Level == 20)
+                {
+                    await WinGame();
+                    return;
+                }
                 await General.LearnAbility(h);
             }
 
-            //I didn't add the stuff for winning the game here... 
-            //in essence the game ends at level 20 with a boss fight thing.
-            //currently it might just crash.  
+        }
+
+        private static async Task WinGame()
+        {
+            io.io.ClearScreen();
+            await io.io.DisplayText("Congratulations! you have reached the anti climactic" +
+                "conclusion of this game!" +
+                "\n\nIn all honesty I didn't really expect anyone to get here...so this is on you..." +
+                "\n\nHave a nice day...maybe try going outside...or a shower... ");
+
+            await io.io.GetNextCommand();
+
+            await General.ExitGame();
+
         }
     }
 }

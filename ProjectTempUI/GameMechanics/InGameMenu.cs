@@ -206,13 +206,25 @@ namespace ProjectTempUI.GameMechanics
 
             int choice = await io.io.GetChoice(itemNames, true);
 
-            if (choice == itemNames.Count)
+            if (choice == itemNames.Count-1)
             {
                 await ManageHero(hero);
                 return;
             }
 
             Item chosenItem = hero.EquippedItem.ToList()[choice];
+
+            //get rid of stats:
+            hero.Accuracy -= chosenItem.Accuracy_Bonus;
+            hero.Speed -= chosenItem.Speed_Bonus;
+            hero.Strength -= chosenItem.Strength_Bonus;
+            hero.Spell_Power -= chosenItem.Spell_Power_Bonus;
+            hero.Armor -= chosenItem.Armor_Bonus;
+            hero.Magic_Resistance -= chosenItem.Magic_Resistance_Bonus;
+            hero.BaseMana -= chosenItem.Mana_Bonus;
+            hero.BaseHP -= chosenItem.HP_Bonus;
+
+
             hero.EquippedItem.Remove(chosenItem);
 
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -225,11 +237,18 @@ namespace ProjectTempUI.GameMechanics
 
 
             gs.CurrentPlayer.InventoryItem.Add(chosenItem);
+
+            io.io.ClearScreen();
+            await io.io.DisplayText($"{hero.ProperName} has unequipped {chosenItem.Name}.");
+            await io.io.GetNextCommand();
+            await ManageHero(hero);
+            return;
         }
 
         private static async Task ViewInventory()
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
+            io.io.ClearScreen();
 
             if (gs.CurrentPlayer.InventoryItem.Count == 0)
             {
@@ -291,6 +310,7 @@ namespace ProjectTempUI.GameMechanics
             if (!item.Active)
             {
                 chosenhero.EquippedItem.Add(item);
+                UseItem(item, chosenhero);
                 await io.io.DisplayText($"Eqipped {item.Name} to {chosenhero.ProperName}.");
             }
             else
@@ -313,8 +333,17 @@ namespace ProjectTempUI.GameMechanics
             h.Spell_Power += i.Spell_Power_Bonus;
             h.Armor += i.Armor_Bonus;
             h.Magic_Resistance += i.Magic_Resistance_Bonus;
-            h.Mana += i.Mana_Bonus;
-            h.HP += i.HP_Bonus;
+
+            if (i.Active)
+            {h.Mana += i.Mana_Bonus;
+            h.HP += i.HP_Bonus; }
+            else
+            {
+                h.BaseMana += i.Mana_Bonus;
+                h.BaseMana += i.HP_Bonus;
+            }
+
+            
 
         }
 
