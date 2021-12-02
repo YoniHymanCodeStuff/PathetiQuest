@@ -71,4 +71,10 @@ I have been told this may not be intuitive and obvious.
  This game is currently not a very fun game. games should probably be fun. 
  This project was more of a proof of concept than anything else so that doesn't really concern me right now... 
  
+ ### extra features
  
+ some things I wanted to change but might not have a chance: 
+
+ - make ui more responsive
+ - encrypt passwords
+ - clean up code and try to properly decouple from UI
