@@ -28,7 +28,7 @@ namespace MidtermProject.GameState
 
         private CurrentGameState()
         {
-
+            
         }
 
         public static CurrentGameState GetInstance()
