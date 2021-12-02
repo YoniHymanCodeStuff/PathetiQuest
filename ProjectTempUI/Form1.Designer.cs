@@ -45,6 +45,7 @@ namespace ProjectTempUI
         //task stuff i did crashed the world... 
         public async Task SlowAddText(string s)
         {
+            InputSubmitButton.Text = "Enter";
             TextDisplay.BringToFront();
             //giving up on this for now. will be back
             //myTimer.Interval = 10;
@@ -62,6 +63,7 @@ namespace ProjectTempUI
         public void ShowTable<T>(List<T> table)
         {
             TableViewer.BringToFront();
+            InputSubmitButton.Text = "Save";
             TableViewer.DataSource = table;
         }
 
@@ -71,11 +73,11 @@ namespace ProjectTempUI
             TableViewer.DataSource = bl;
         }
 
-        public void NextButtonreadyIndicator()
-        {
-            NextButton.BackColor = Color.MediumSpringGreen;
+        //public void NextButtonreadyIndicator()
+        //{
+            
 
-        }
+        //}
 
         #region Windows Form Designer generated code
 
@@ -90,9 +92,8 @@ namespace ProjectTempUI
             this.Title = new System.Windows.Forms.Label();
             this.TextInput = new System.Windows.Forms.TextBox();
             this.InputSubmitButton = new System.Windows.Forms.Button();
-            this.NextButton = new System.Windows.Forms.Button();
-            this.StartButton = new System.Windows.Forms.Button();
             this.TableViewer = new System.Windows.Forms.DataGridView();
+            this.subtitle = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TableViewer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -140,39 +141,13 @@ namespace ProjectTempUI
             this.InputSubmitButton.Cursor = System.Windows.Forms.Cursors.Default;
             this.InputSubmitButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.InputSubmitButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.InputSubmitButton.Location = new System.Drawing.Point(619, 184);
+            this.InputSubmitButton.Location = new System.Drawing.Point(676, 184);
             this.InputSubmitButton.Name = "InputSubmitButton";
             this.InputSubmitButton.Size = new System.Drawing.Size(75, 29);
             this.InputSubmitButton.TabIndex = 3;
-            this.InputSubmitButton.Text = "Submit";
+            this.InputSubmitButton.Text = "Enter";
             this.InputSubmitButton.UseVisualStyleBackColor = false;
             this.InputSubmitButton.Click += new System.EventHandler(this.InputSubmitButton_Click);
-            // 
-            // NextButton
-            // 
-            this.NextButton.BackColor = System.Drawing.Color.MediumSeaGreen;
-            this.NextButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.NextButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.NextButton.Location = new System.Drawing.Point(725, 182);
-            this.NextButton.Name = "NextButton";
-            this.NextButton.Size = new System.Drawing.Size(75, 33);
-            this.NextButton.TabIndex = 5;
-            this.NextButton.Text = "Next";
-            this.NextButton.UseVisualStyleBackColor = false;
-            this.NextButton.Click += new System.EventHandler(this.NextButton_Click);
-            // 
-            // StartButton
-            // 
-            this.StartButton.BackColor = System.Drawing.Color.DarkCyan;
-            this.StartButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.StartButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.StartButton.Location = new System.Drawing.Point(676, 363);
-            this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(75, 32);
-            this.StartButton.TabIndex = 6;
-            this.StartButton.Text = "Start";
-            this.StartButton.UseVisualStyleBackColor = false;
-            this.StartButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // TableViewer
             // 
@@ -192,6 +167,18 @@ namespace ProjectTempUI
             this.TableViewer.TabIndex = 7;
             this.TableViewer.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TableViewer_CellContentClick);
             // 
+            // subtitle
+            // 
+            this.subtitle.AutoSize = true;
+            this.subtitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.subtitle.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.subtitle.Location = new System.Drawing.Point(297, 66);
+            this.subtitle.Name = "subtitle";
+            this.subtitle.Size = new System.Drawing.Size(284, 20);
+            this.subtitle.TabIndex = 8;
+            this.subtitle.Text = "A non ironic text based adventure in 2021";
+            this.subtitle.Click += new System.EventHandler(this.subtitle_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.InputSubmitButton;
@@ -199,9 +186,8 @@ namespace ProjectTempUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.ClientSize = new System.Drawing.Size(833, 472);
+            this.Controls.Add(this.subtitle);
             this.Controls.Add(this.TableViewer);
-            this.Controls.Add(this.StartButton);
-            this.Controls.Add(this.NextButton);
             this.Controls.Add(this.InputSubmitButton);
             this.Controls.Add(this.TextInput);
             this.Controls.Add(this.Title);
@@ -222,9 +208,8 @@ namespace ProjectTempUI
         private System.Windows.Forms.Label Title;
         private System.Windows.Forms.TextBox TextInput;
         private System.Windows.Forms.Button InputSubmitButton;
-        private System.Windows.Forms.Button NextButton;
-        private System.Windows.Forms.Button StartButton;
         private System.Windows.Forms.DataGridView TableViewer;
+        private System.Windows.Forms.Label subtitle;
     }
 }
 

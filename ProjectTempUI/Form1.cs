@@ -38,19 +38,20 @@ namespace ProjectTempUI
 
             //just added this stuff to here to try to get rid of extra button. 
             //might work? 
+            IO_Global.UiChangedCollection = TableViewer.DataSource;
             IO_Global.NextPressed.Start();
             IO_Global.NextPressed = new Task(() => { });
-            NextButton.BackColor = Color.MediumSeaGreen;
+            
 
         }
 
         private void NextButton_Click(object sender, EventArgs e)
         {
-            IO_Global.UiChangedCollection = TableViewer.DataSource;
+            //IO_Global.UiChangedCollection = TableViewer.DataSource;
 
-            IO_Global.NextPressed.Start();
-            IO_Global.NextPressed = new Task(() => { });
-            NextButton.BackColor = Color.MediumSeaGreen;
+            //IO_Global.NextPressed.Start();
+            //IO_Global.NextPressed = new Task(() => { });
+            //NextButton.BackColor = Color.MediumSeaGreen;
 
 
         }
@@ -67,6 +68,7 @@ namespace ProjectTempUI
         }
 
         //this is the start button that doesn't want to rename
+        //and also no longer exists... 
         private void button1_Click(object sender, EventArgs e)
         {
             //MidtermProject.GameMechanics.Getting_Started.TestingStuff();
@@ -79,6 +81,11 @@ namespace ProjectTempUI
         }
 
         private void TableViewer_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void subtitle_Click(object sender, EventArgs e)
         {
 
         }

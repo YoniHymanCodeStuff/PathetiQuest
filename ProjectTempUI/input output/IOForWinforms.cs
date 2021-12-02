@@ -90,7 +90,7 @@ namespace ProjectTempUI.input_output
         public async Task GetNextCommand()
         {
             var gs = CurrentGameState.GetInstance();
-            gs.TheForm.NextButtonreadyIndicator();
+            
             await Task.Run(IO_Global.NextPressed.Wait);
 
         }
