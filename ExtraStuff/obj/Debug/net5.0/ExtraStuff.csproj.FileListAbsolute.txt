@@ -1,0 +1,5 @@
+C:\Users\yonhy\source\repos\MidtermProject\ExtraStuff\obj\Debug\net5.0\ExtraStuff.csprojAssemblyReference.cache
+C:\Users\yonhy\source\repos\MidtermProject\ExtraStuff\obj\Debug\net5.0\ExtraStuff.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\yonhy\source\repos\MidtermProject\ExtraStuff\obj\Debug\net5.0\ExtraStuff.AssemblyInfoInputs.cache
+C:\Users\yonhy\source\repos\MidtermProject\ExtraStuff\obj\Debug\net5.0\ExtraStuff.AssemblyInfo.cs
+C:\Users\yonhy\source\repos\MidtermProject\ExtraStuff\obj\Debug\net5.0\ExtraStuff.csproj.CoreCompileInputs.cache
