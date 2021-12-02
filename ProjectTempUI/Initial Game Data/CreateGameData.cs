@@ -35,6 +35,7 @@ namespace MidtermProject.Create_Game_Data
             uow.Enemies.AddRange(enemyTypes);
             uow.Items.AddRange(items);
             uow.IntroTexts.AddRange(intros);
+            uow.Players.Add(new Player { UserName = "default", Password = "default" });
             uow.Complete();
 
 
@@ -388,7 +389,7 @@ namespace MidtermProject.Create_Game_Data
             };
 
         }
-                
+
         static void HeroClasses()
         {
             heroClasses = new List<HeroType> {
@@ -969,7 +970,7 @@ namespace MidtermProject.Create_Game_Data
                 HP_Bonus = 150,
                 Active = true,
                 IsArchetype = true
-                
+
                 },
                 new Item{
                 Name = "Mega Health potion",
