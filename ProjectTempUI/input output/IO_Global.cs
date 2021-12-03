@@ -23,29 +23,9 @@ namespace MidtermProject.input_output
 
         public static  string UiInput { get; set; }
         public static object UiChangedCollection { get; set; } // a very bad idea... 
+        
+        //this should be an object of the current IO type: 
         public static IOForWinforms io { get; set; } = new IOForWinforms();
-
-
-
-        //public static void SlowPrint(string s)
-        //{
-        //    foreach (char c in s)
-        //    {
-        //        Console.Write(c);
-        //        Thread.Sleep(10);
-        //    }
-        //}
-
-        //this will be used to split the strings into 
-        //pieces that can fit in IO viewport
-        public static IEnumerable<string> ChunksUpto(string str, int maxChunkSize)
-        {
-            //I need to edit this so that is doesn't cut words. 
-            for (int i = 0; i < str.Length; i += maxChunkSize)
-                yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
-        }
-
-
 
     }
 }

@@ -64,6 +64,9 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
+        //saves the game, by syncing all current entities to the database. 
+        //this way - if you shut the game in the middle -> all changes go 
+        //back to the last time you saved:
         private static async Task SaveGame()
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -99,13 +102,15 @@ namespace ProjectTempUI.GameMechanics
             }
         }
 
+        //this is a place to stick useful info for the players:
+        //(Ideally, texts like this would also be stored and pulled from a sql table and be easy to modify without opening the code file...)
         private static async Task HelpMenu()
         {
             string helptext = "Hit next to return to main menu.\n\n" +
                 "Rest - Resting restores your Heroes to full health and mana," +
                 " but comes at the price of nullifying any experience they have gained since they last" +
                 " leveled up." +
-                "\n\nBattle - stat changing effects in battle are permanent. So is death. Try not to die."
+                "\n\nBattle - Death in battle is permanent. So try not to die."
                 ;
 
             await io.io.DisplayText(helptext);
@@ -115,6 +120,7 @@ namespace ProjectTempUI.GameMechanics
             await MainMenu();
         }
 
+        //heals heroes to full health and mana, at the cost of nullifying Exp. 
         private static async Task Rest()
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -185,6 +191,7 @@ namespace ProjectTempUI.GameMechanics
             }
         }
 
+        //move item from hero back to player inventory: 
         private static async Task Unequip(Hero hero)
         {
             if (hero.EquippedItem.Count == 0)
@@ -228,13 +235,6 @@ namespace ProjectTempUI.GameMechanics
             hero.EquippedItem.Remove(chosenItem);
 
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
-            //will the player be able to hold more than 1 copy in inventory?
-            //probably not, since each one has a specific id. might need to do items
-            //like heroes, and have an item instance class that copies it's 
-            //properties from the item... (the proper way to do this might be with
-            //a separate class for each item. like I probably should have done for each hero class...  but that seems like more work than
-            //this is worth for now...)
-
 
             gs.CurrentPlayer.InventoryItem.Add(chosenItem);
 
@@ -267,9 +267,7 @@ namespace ProjectTempUI.GameMechanics
 
             await io.io.DisplayText("choose an Item to use/equip");
             int choice = await io.io.GetChoice(itemNames, true);
-            
-            //had a strange bug here that I don't understand that made 
-            //the "back" register as an option in itemnames.count... 
+           
 
             //back:
             if (choice == gs.CurrentPlayer.InventoryItem.Count)
@@ -285,6 +283,7 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
+        //manages the users choice to use/equip the item:
         private static async Task EquipItem(Item item)
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -325,6 +324,7 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
+        //applies the effects of the item to the hero. 
         private static void UseItem(Item i, Hero h)
         {
             h.Accuracy += i.Accuracy_Bonus;

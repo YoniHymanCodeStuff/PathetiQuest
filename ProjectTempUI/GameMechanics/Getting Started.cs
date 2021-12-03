@@ -16,6 +16,8 @@ namespace MidtermProject.GameMechanics
     static class Getting_Started
     {
 
+        //starting point for the whole program. this is called by 
+        //the form opening:
         public static async Task init()
         {
             try
@@ -31,87 +33,26 @@ namespace MidtermProject.GameMechanics
             }
 
         }
+        
+        //for debbugging I just make init point to this instead: 
         public static async Task TestingStuff()
         {
-
-            var gs = GameState.CurrentGameState.GetInstance();
-            gs.uow.LazyCreateDB();
-
-
-
-            var items = gs.uow.Items.GetAll().ToList();
-
-            items = await io.io.GetTableChanges(items);
+            //var gs = GameState.CurrentGameState.GetInstance();
             
-;           gs.uow.Items.UpdateRange(items);
-            gs.uow.Complete();
-
-            
-
-            
-            //Hero h = gs.uow.Heroes.EagerloadHero(78);
-            //Hero clone = (Hero)h.Clone();
-            //Hero clone = General.DeepClone<Hero>(h);
-
-            //foreach (var a in h.Abilities)
-            //{
-            //    a.Manacost += 5;
-            //    await io.io.DisplayText($"{a.Manacost}");
-            //}
-
-            // gs.CurrentPlayer = gs.uow.Players.EagerlyLoadPlayer(1);
-
-            //await BattleSystem.StartBattle();
-            //await io.io.GetNextCommand();
-
-
-
-
-
-
-
-            //Player pl = gs.uow.Players.EagerlyLoadPlayer(58);
-
-            //foreach (var hero in pl.Heroes)
-            //{
-            //    await io.io.DisplayText($"{hero.ProperName}:{hero.Id}");
-            //}
-
-            ////await io.io.DisplayText($"{pl.InventoryItem.Count}");
-            //await io.io.DisplayText($"{pl.Heroes.ToList()[0].ProperName}");
-
-            //await io.io.DisplayText($"{pl.Heroes.ToList()[0].Abilities.Count}");
-
-
-
             await io.io.DisplayText("Done");
 
-
-
-
-            //await Task.Factory.StartNew(()=> { });
-            //this is just so the warnings leave me be. 
-            //io.io.BindTable();
-            //io.io.DisplayTable(EF.DataAccess.GetAll.GetAllAbilities());
-
-
-            //create db: 
-            //Create_Game_Data.CreateGameData.init();
-            //await io.io.DisplayText("complete");
-            //await io.io.GetNextCommand();
-            //await General.ExitGame();
         }
 
+        //first login/create user menu: 
         public static async Task StartingPoint()
         {
             //creates db if doesn't already exist. 
             var gs = GameState.CurrentGameState.GetInstance();
             gs.uow.LazyCreateDB();
 
-
             //Music.playOuterMenuLoop
 
-            //intro text/header... mostly UI stuff
+            //intro text:
             await io.io.DisplayText("Welcome to Pathetiquest, the text based adventure you never knew " +
                 "you wanted to play!\n");
 
@@ -147,7 +88,6 @@ namespace MidtermProject.GameMechanics
 
             var gs = GameState.CurrentGameState.GetInstance();
 
-
             await io.io.DisplayText("\nEnter Username:");
             Player user;
 
@@ -155,9 +95,7 @@ namespace MidtermProject.GameMechanics
             while (true)
             {
                 string username = await io.io.GetTextInput();
-
-
-                //user = DataAccess.GetPlayerByName(username);
+                                                
                 user = gs.uow.Players.SingleOrDefault(x => x.UserName == username);
 
                 if (user != null) { break; }
@@ -184,7 +122,7 @@ namespace MidtermProject.GameMechanics
 
             await io.io.DisplayText($"\nWelcome Back, {user.UserName}");
 
-            //here we load the rest of the data for the player:(and yes, it should probably all just be in one place.. ) 
+            //here we load the rest of the data for the player: 
             user = gs.uow.Players.EagerlyLoadPlayer(user.Id);
 
             gs.CurrentPlayer = user;
@@ -271,6 +209,8 @@ namespace MidtermProject.GameMechanics
             await ChooseParty();
         }
 
+
+        //creating 3 heroes for the player: 
         public static async Task ChooseParty()
         {
 
@@ -323,10 +263,10 @@ namespace MidtermProject.GameMechanics
 
                     //linking the hero to the player: 
                     player = cplayer
-                    //is this a mistake? now it will be linked two ways... ??? 
+                    
                 };
 
-                //a really bad way to add the initial attack to everyone... I should index the abilities ad not use the stupid string...
+                //a really bad way to add the initial attack to everyone... I should index the abilities and not use the stupid string...
                 NewGuy.Abilities.Add(gs.uow.Abilities.SingleOrDefault(x => x.Name == "Basic Attack"));
 
 
@@ -374,6 +314,9 @@ namespace MidtermProject.GameMechanics
 
         }
 
+        //this checks if players logging in have already finished creating
+        //3 heroes or if they exited in the middle of the proccess and need
+        //to be sent back:
         public static async Task SetupCompleteChecker()
         {
             var gs = GameState.CurrentGameState.GetInstance();
@@ -392,9 +335,7 @@ namespace MidtermProject.GameMechanics
 
         public static async Task IntroMessage()
         {
-            var gs = GameState.CurrentGameState.GetInstance();
-            var cplayer = gs.CurrentPlayer;
-
+                        
             io.io.ClearScreen();
             string wm = $"Your party is ready, and now your adventure begins." +
                 $"\nYour heroes have entered some generic dark place. will you succeed in battling" +
@@ -404,6 +345,8 @@ namespace MidtermProject.GameMechanics
             await io.io.GetNextCommand();
         }
 
+
+        //this is just a silly function to display pwd characters as "*": 
         private static string PasswordDisplay(string inp)
         {
             string pwddisplay = "";

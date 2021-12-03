@@ -13,6 +13,7 @@ namespace ProjectTempUI.GameMechanics
 {
     class BattleAftermath
     {
+        //"game over" sequence:
         public static async Task Defeat()
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -61,6 +62,7 @@ namespace ProjectTempUI.GameMechanics
             }
         }
 
+        //when you win a battle this manages giving exp and items: 
         public static async Task Victory(List<EnemyType> defeatedEn)
         {
                         
@@ -75,6 +77,7 @@ namespace ProjectTempUI.GameMechanics
             await InGameMenu.MainMenu();
         }
 
+        //manages "finding" items:
         private static async Task GetLoot(int EnemyLevel)
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -99,6 +102,7 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
+        //manages exp gain:
         private static async Task ManageExp(List<EnemyType> defeatedEn)
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -123,6 +127,7 @@ namespace ProjectTempUI.GameMechanics
             }
         }
 
+        //manages leveling up heroes:
         private static async Task LevelUp(Hero h)
         {
             h.Level++;
@@ -152,6 +157,7 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
+        //win game sequence:
         private static async Task WinGame()
         {
             io.io.ClearScreen();

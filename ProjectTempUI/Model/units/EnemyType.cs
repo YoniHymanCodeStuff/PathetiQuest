@@ -11,21 +11,16 @@ namespace MidtermProject.Model
     [Table("Enemy Types")]
     public class EnemyType : Unit
     {
+        //these are enemy types. the actual enemies are created before the
+        //battle and just use these as cookie cutters that they copy the 
+        //data from. but the entities here are just the enemy archetypes. 
+
         [MaxLength(50)]
         public string CreatureType { get; set; }
         [MaxLength(1000)]
         public string IntroText { get; set; }
 
-        //will probably want to add a ctor here with all the bloody fields... 
-
-        public EnemyType(string ctype, string introtext, double accuracy, double armor, double magicRes, double spellp, double strength, double speed, double hp, double mana, int level, List<Ability> abilities) :
-        base(accuracy, armor, magicRes, spellp, strength, speed, hp, mana, level, abilities)
-        {
-            CreatureType = ctype;
-            IntroText = introtext;
-
-        }
-
+       
         public EnemyType()
         {
 

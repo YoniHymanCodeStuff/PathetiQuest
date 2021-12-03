@@ -13,21 +13,9 @@ namespace ProjectTempUI.input_output
     class IOForWinforms : IMakeIO
     {
 
-        public void DisplayTable<T>(List<T> table)
-        {
-            var gs = CurrentGameState.GetInstance();
-            gs.TheForm.ShowTable(table);
-        }
-
         public async Task DisplayText(string text)
         {
             await WinformsUtils.ChangeScreenFeed(text);
-        }
-
-        public void BindTable()
-        {
-            //var gs = CurrentGameState.GetInstance();
-            //gs.TheForm.BindTable(DataAccess.BindAbilities());
         }
 
         public async Task<int> GetChoice(List<string> inpchoices,bool hasback)
@@ -68,9 +56,6 @@ namespace ProjectTempUI.input_output
             }
 
             
-
-            //this is not good...
-            //might actually be easier with a dropdown....
         }
 
         public void ClearScreen()
@@ -87,6 +72,7 @@ namespace ProjectTempUI.input_output
 
         }
 
+        //this just means - wait for the user to hit enter.  
         public async Task GetNextCommand()
         {
             var gs = CurrentGameState.GetInstance();
@@ -114,68 +100,22 @@ namespace ProjectTempUI.input_output
     }
 
 
+    //just a place to keep code to avoid repeating above: 
     public static class WinformsUtils
     {
-        //I have two of these so I can slowprint the new stuff while
-        //having the old stuff static. 
-        private static int CharCount { get; set; } = 0;
-       
-
-
-
-        ////this is for the winform to get the active screenfeed
-        //public static string GetScreenFeed()
-        //{
-        //    return ScreenFeed;
-        //}
-
-        //this is the function the interface member calls. 
+     
         public static async Task ChangeScreenFeed(string str)
         {
-            
-            //int maxchars = 500;
+                        
             var gs = CurrentGameState.GetInstance();
 
             //adding an obligatory newline. maybe I wont regret this... 
             str = "\n" + str;
 
             await gs.TheForm.SlowAddText(str);
-
-
-            //this whole thing is suppsed to clear screen after x
-            //chars. but it makes more sense to just clear screen when relevant. 
-            //if (CharCount + str.Length < maxchars)
-            //{
-            //    await gs.TheForm.SlowAddText(str);
-            //    CharCount += str.Length;
-            //    //AddtoSF(str);
-            //}
-            //else
-            //{
-            //    gs.TheForm.Clrscreen();
-            //    await gs.TheForm.SlowAddText(str);
-            //    CharCount = str.Length;
-            //}
+                                   
 
         }
 
-        //private static void AddtoSF(string s)
-        //{
-        //    var gs = CurrentGameState.GetInstance();
-
-        //    foreach (var ch in s)
-        //    {
-        //        ScreenFeed += ch;
-        //        gs.TheForm.SyncScreen();
-        //        //Thread.Sleep(10);
-        //    }
-            
-        //}
-
-        //public static void ClearScreenFeed()
-        //{
-        //    ScreenFeed = "";
-
-        //}
     }
 }

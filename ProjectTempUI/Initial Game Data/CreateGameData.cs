@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MidtermProject.Create_Game_Data
 {
+    //this generates the initial game data: 
     class CreateGameData
     {
         static IList<Ability> InitialAbilities;

@@ -24,23 +24,7 @@ namespace MidtermProject.Model
         public double HP { get; set; }
         public double Mana { get; set; }
         public int Level { get; set; }
-        
-
-        public Unit(double accuracy, double armor, double magicRes, double spellp,
-            double strength, double speed, double hp, double mana, int level, List<Ability> abilities)
-        {
-            
-            Accuracy = accuracy;
-            Armor = armor;
-            Magic_Resistance = magicRes;
-            Spell_Power = spellp;
-            Strength = strength;
-            Speed = speed;
-            HP = hp;
-            Mana = mana;
-            Level = level;
-            Abilities = abilities;
-        }
+       
 
         public Unit()
         {

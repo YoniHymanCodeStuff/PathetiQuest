@@ -13,20 +13,13 @@ namespace ProjectTempUI
        [STAThread]
         static void Main()
         {
-            
-            //UI stuff:
+                        
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
             Application.Run(gs.TheForm = new Form1());
-            
-
-            //activating game:
-
-            //Getting_Started.OpeningScreen();
-
-            
+                        
             
         }
 

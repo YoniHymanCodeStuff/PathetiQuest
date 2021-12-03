@@ -11,6 +11,10 @@ namespace MidtermProject.Model
     [Table("Hero Types")]
     public class HeroType : Unit
     {
+        //these are hero archetypes. all heroes created have their base
+        //stats copied from their respective hero "class", which is just
+        ///1 row in this table. 
+
         [MaxLength(50)]
         public string ClassName { get; set; }
         
@@ -18,12 +22,6 @@ namespace MidtermProject.Model
         //and helps differentiate between children and parents
         //(there is probably a better way to do that, but this was easy and right there...)... 
         public int classIndex { get; set; } 
-        public HeroType(string className, double accuracy, double armor, double magicRes, double spellp, double strength, double speed, double hp, double mana, int level, List<Ability> abilities):
-            base(accuracy,armor,magicRes,spellp,strength,speed,hp,mana,level,abilities)
-        {
-            ClassName = className;
-
-        }
 
         public HeroType()
         {

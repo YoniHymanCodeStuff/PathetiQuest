@@ -37,10 +37,7 @@ namespace MidtermProject.Model
             return Name;
         }
 
-        //protected Item()
-        //{
 
-        //}
 
     }
 }

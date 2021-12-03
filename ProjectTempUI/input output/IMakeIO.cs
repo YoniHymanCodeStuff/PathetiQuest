@@ -15,7 +15,7 @@ namespace MidtermProject.input_output
         //these are functions that the program calls to 
         //send things directly to display on the UI
         public Task DisplayText(string text);
-        public void DisplayTable<T>(List<T> table);
+
         public Task<List<T>> GetTableChanges<T>(List<T> table);
 
         //these are the functions that the program calls 
@@ -23,7 +23,7 @@ namespace MidtermProject.input_output
         //(might make sens to move these somewhere independent of the changing
         //part of the interface...)
         public Task<string> GetTextInput();
-        public Task<int> GetChoice(List<string> choices,bool HasBack);//has back is true when there is a "back" option
+        public Task<int> GetChoice(List<string> choices,bool HasBack);//hasback is true when there is a "back" option
         public Task GetNextCommand();
 
 

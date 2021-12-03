@@ -18,15 +18,16 @@ namespace ProjectTempUI.GameMechanics
         private static List<Hero> DeadHeroes;
         private static BLoopInfo bl;
 
+        //entry point for battle sequence: 
         public static async Task StartBattle()
         {
             var gs = CurrentGameState.GetInstance();
             io.io.ClearScreen();
-            
-            //generate intro text. 
-            string introtext =  gs.uow.IntroTexts.GetRandomText();
 
-            Heroes = gs.CurrentPlayer.Heroes.ToList();//is this clones or operating on the originals? 
+            //generate intro text. 
+            string introtext = gs.uow.IntroTexts.GetRandomText();
+
+            Heroes = gs.CurrentPlayer.Heroes.ToList();
             Enemies = GenerateEnemies();
 
             string pluralizer = "s";
@@ -51,10 +52,10 @@ namespace ProjectTempUI.GameMechanics
                     await io.io.DisplayText($"You attempted to retreat, but the {Enemies[0].CreatureType}{pluralizer} chased you down.");
                 }
             }
-            //this might want to be its own function, but then it is more difficult to toggle stopping the flow of the main one, and - no time. 
 
             await io.io.DisplayText($"Chaaaarge!!!");
             await io.io.GetNextCommand();
+
 
             try
             {
@@ -85,14 +86,14 @@ namespace ProjectTempUI.GameMechanics
             public List<Hero> HeroDiedThisRound { get; set; } = new List<Hero>();
             public int EnemyDiedThisRound { get; set; } = 0;
 
+            //this helps my functions that take "Unit" (enemies or heroes) know if they are 
+            //holding an enemy or a hero:
             public bool CurrentTargetisEnemy { get; set; }
 
         }
 
         private static async Task BattleLoop()
         {
-                        
-            //var gs = CurrentGameState.GetInstance();
 
             DeadHeroes = new List<Hero>();
             DeadEnemies = new List<EnemyType>();
@@ -130,7 +131,7 @@ namespace ProjectTempUI.GameMechanics
                     }
                 }
 
-                
+
 
                 //sort the attacks so fastest goes first:
                 bl.FighterMovePairs = bl.FighterMovePairs.OrderByDescending(x => x.Key.Speed).ToList();
@@ -143,7 +144,7 @@ namespace ProjectTempUI.GameMechanics
                 {
 
                     //checking that there are still live units on both sides... since that could happen during subloop...
-                    if (i.Key.HP > 0 && Enemies.Where(x=>x.HP>0).ToList().Count > 0 && Heroes.Where(x => x.HP > 0).ToList().Count > 0)
+                    if (i.Key.HP > 0 && Enemies.Where(x => x.HP > 0).ToList().Count > 0 && Heroes.Where(x => x.HP > 0).ToList().Count > 0)
                     {
 
 
@@ -158,31 +159,32 @@ namespace ProjectTempUI.GameMechanics
 
 
                 }
-             
-                
+
+
                 await ShowRoundResults();
 
                 RemoveDead();
 
             }
 
-            await io.io.GetNextCommand();
-            
+
             if (Heroes.Count == 0)
             {
                 await BattleAftermath.Defeat();
             }
             else
             {
-                await Inheritance();
+                if (DeadHeroes.Count > 0) { await Inheritance(); }
                 await BattleAftermath.Victory(DeadEnemies);
             }
         }
 
-        
+
+        //this deals with removing dead heroes from the main collection
+        //after the battle and transfers their items to the player: 
         private static async Task Inheritance()
         {
-            //this deals with removing dead heroes from the main collection after the battle and transfers their items. 
+
             io.io.ClearScreen();
             var gs = CurrentGameState.GetInstance();
 
@@ -200,10 +202,12 @@ namespace ProjectTempUI.GameMechanics
             await io.io.GetNextCommand();
         }
 
+
+        //this removes dead heroes and enemies from the 
+        //collection that the battle loop iterates through:
         private static void RemoveDead()
         {
-            //this removes dead heroes and enemies from the 
-            //collection that the battle loop iterates through. 
+
 
             DeadHeroes.AddRange(Heroes.Where(x => x.HP <= 0).ToList());
             Heroes.RemoveAll(x => x.HP <= 0);
@@ -211,25 +215,28 @@ namespace ProjectTempUI.GameMechanics
 
             DeadEnemies.AddRange(Enemies.Where(x => x.HP <= 0).ToList());
             Enemies.RemoveAll(x => x.HP <= 0);
-            
+
         }
 
+
+        //this takes all the info saved during the battle loop and 
+        //generates a summary message:  
         private static async Task ShowRoundResults()
         {
-            
+
             io.io.ClearScreen();
             string resultstr = "Round Results:\n\n";
 
 
             string singleTargets = "";
             //adding text for all single targeted heroes. 
-                        
+
 
             foreach (var d in bl.SingleTargets)
             {
                 //removing doubles from list. didn't work... 
                 bl.SingleTargets[d.Key] = d.Value.Distinct().ToList();
-                
+
                 singleTargets += $"{d.Key.ProperName} ";
 
                 //only if unit was damaged add health left. 
@@ -242,7 +249,7 @@ namespace ProjectTempUI.GameMechanics
                 {
                     vtexts.Add(ability.verb);
                     if (ability.DamageDealt > 0) { wasdamaged = true; }
-                                     
+
                 }
 
                 vtexts = vtexts.Distinct().ToList();
@@ -252,7 +259,7 @@ namespace ProjectTempUI.GameMechanics
                     singleTargets += v;
                 }
 
-                if(wasdamaged && d.Key.HP>0)
+                if (wasdamaged && d.Key.HP > 0)
                 { healthleft = $" and was left with {Math.Round(d.Key.HP, 2)} Health."; }
 
                 singleTargets += healthleft;
@@ -272,7 +279,7 @@ namespace ProjectTempUI.GameMechanics
                 }
                 if (bl.HeroGroupEffects.Count > 0) { resultstr += "and"; }
 
-                resultstr += $" lost a total of {Math.Round(bl.HeroGroupDamage,2)} health.";
+                resultstr += $" lost a total of {Math.Round(bl.HeroGroupDamage, 2)} health.";
 
             }
 
@@ -306,14 +313,14 @@ namespace ProjectTempUI.GameMechanics
             await io.io.GetNextCommand();
         }
 
+        //applies ability effects to the unit objects:
         private static void ApplyEffects(Unit caster, List<Unit> targets, Ability ability)
         {
-            //var gs = CurrentGameState.GetInstance();
-
+            
             double RelevantBuffer;
             double RelevantAttack;
 
-                       
+
             //set up right type of attack: 
             if (ability.IsPhysical)
             { RelevantAttack = caster.Strength; }
@@ -333,12 +340,12 @@ namespace ProjectTempUI.GameMechanics
 
             //accuracy 
             double successchance = 75 + (caster.Accuracy * 0.25);
-            
+
 
             //bc I forgot to add accuracy till later, I am not reworking this whole thing
             //now and the round summary messages will be slightly innacurate in regard to accuracy... 
             //kind of ok since this battle system needs a major overhaul to actually be somewhat fun... 
-                    
+
 
             //logging the data to use in message:
             if (bl.CurrentTargetisEnemy)
@@ -352,7 +359,7 @@ namespace ProjectTempUI.GameMechanics
                 if (!ability.AOE)
                 {
                     Hero targethero = ((Hero)targets[0]);
-                    
+
                     if (bl.SingleTargets.ContainsKey(targethero))
                     {
                         bl.SingleTargets[targethero].Add(ability);
@@ -371,13 +378,13 @@ namespace ProjectTempUI.GameMechanics
 
             }
 
-            
+
 
             //applying to targets:
             foreach (var target in targets)
             {
 
-                
+
                 //do not apply to dead units or when attack "misses" (applying accuracy): 
                 if (target.HP <= 0 || rnd.Next(1, 101) > successchance)
                 {
@@ -403,7 +410,7 @@ namespace ProjectTempUI.GameMechanics
                 target.Armor -= ability.Alter_Armor;
                 target.Magic_Resistance -= ability.Alter_Magic_Resistance;
 
-                
+
                 //logging the damage done: 
                 if (bl.CurrentTargetisEnemy)
                 {
@@ -417,7 +424,7 @@ namespace ProjectTempUI.GameMechanics
                 }
 
 
-                
+
 
                 //taking care of deaths. not removing from list untill out of loop.. 
                 if (target.HP <= 0)
@@ -434,14 +441,16 @@ namespace ProjectTempUI.GameMechanics
 
                     }
                 }
-                
+
             }
 
         }
 
+        //this checks who the attacker is and what ability they are using
+        //and determines who the targets are:
         private static List<Unit> GetTargets(Unit caster, Ability ability)
         {
-            //var gs = CurrentGameState.GetInstance();
+            
             List<Unit> PotentialTargets;
 
             if (ability.TargetEnemies && Heroes.Contains(caster)
@@ -450,7 +459,7 @@ namespace ProjectTempUI.GameMechanics
                 PotentialTargets = Enemies.Cast<Unit>().ToList();
                 bl.CurrentTargetisEnemy = true;
 
-                //this might have worked, or it might have made a big mess... 
+                
             }
             else
             {
@@ -473,16 +482,16 @@ namespace ProjectTempUI.GameMechanics
 
             return PotentialTargets;
         }
+       
+        //Randomly generate the enemy ability choice:
         private static Ability GetEnemyAttack(EnemyType e)
         {
 
             var Abils = e.Abilities.ToList();
-            //if this is somehow just a pointer it will be bad... 
-            //hopefully conversion deals with that... 
 
             int choice;
 
-            //check for enough mana:
+            //remove options that enemy doesn't have mana to cast:
             while (true)
             {
                 choice = rnd.Next(0, Abils.Count);
@@ -495,6 +504,8 @@ namespace ProjectTempUI.GameMechanics
 
             return Abils[choice];
         }
+        
+        //get ability choice from user: 
         private static async Task<Ability> GetHeroAttack(Hero h)
         {
 
@@ -512,6 +523,8 @@ namespace ProjectTempUI.GameMechanics
             return h.Abilities.ToList()[choice];
         }
 
+        //generates the enemies for the encounter taking into account 
+        //the hero levels: 
         private static List<EnemyType> GenerateEnemies()
         {
             var gs = CurrentGameState.GetInstance();
@@ -526,10 +539,10 @@ namespace ProjectTempUI.GameMechanics
             EnemyType currentET = gs.uow.Enemies.EagerloadRandomEnemyType(enemylevelbase);
 
             //determine the amount of enemies... goes down according to the level  
-            int amount = (rnd.Next(1, 12- currentET.Level)) ;
+            int amount = (rnd.Next(1, 12 - currentET.Level));
             //I think this is too many... 
-            
-            
+
+
 
             List<EnemyType> enemies = new List<EnemyType>();
             for (int i = 0; i < amount; i++)
@@ -551,9 +564,7 @@ namespace ProjectTempUI.GameMechanics
                     Level = currentET.Level,
                     Abilities = currentET.Abilities
                 };
-                //I think this should create actual copies of the value types and 
-                //not just pointers... we'll see...
-
+                
                 e.Abilities.Add(gs.uow.Abilities.SingleOrDefault(x => x.Name == "Basic Attack"));
 
                 enemies.Add(e);

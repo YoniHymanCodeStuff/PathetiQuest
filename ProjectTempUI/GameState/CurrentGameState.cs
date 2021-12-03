@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MidtermProject.GameState
 {
-    //A singleton class that holds current global game data. 
+    //A singleton class that holds dynamic global game data. 
     class CurrentGameState
     {
         private static readonly object lockObj = new object();
@@ -24,8 +24,7 @@ namespace MidtermProject.GameState
 
         public Form1 TheForm;
 
-       //public Action CurrentBack { get; set; } = () => { };
-
+       
         private CurrentGameState()
         {
             

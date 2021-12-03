@@ -18,7 +18,7 @@ namespace ProjectTempUI.GameMechanics
         
         public static async Task ModMenu()
         {
-            var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
+            
             io.io.ClearScreen();
             int choice = await io.io.GetChoice(new List<string> {"Edit Data Tables","Add new Entries" }, true);
 
@@ -38,6 +38,7 @@ namespace ProjectTempUI.GameMechanics
             }
         }
 
+        //manages adding empty rows to tables:
         private static async Task NewEntries()
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -126,6 +127,7 @@ namespace ProjectTempUI.GameMechanics
             await ModMenu();
         }
 
+        //manages editing the existing rows with a table interface: 
         private static async Task TableEditing()
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
@@ -192,10 +194,11 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
+        //the function that the previous function keeps using to actually edit a table...
         private static async Task EditTable<T>(List<T> table)
         {
             var gs = MidtermProject.GameState.CurrentGameState.GetInstance();
-            var x = table;
+            
             table = await io.io.GetTableChanges(table);
             gs.uow.Complete();
             io.io.ClearScreen();
@@ -204,6 +207,7 @@ namespace ProjectTempUI.GameMechanics
             await TableEditing();
         }
 
+        //get safe numeric input from the user. 
         private static async Task<int> SafeGetNum(int max)
         {
             int retval;
@@ -226,6 +230,8 @@ namespace ProjectTempUI.GameMechanics
 
         }
 
+        //this is not really neccessary but just helped keep the 
+        //big switch case less messy: 
         private static async Task Warning(string warning)
         {
             await io.io.DisplayText(warning);

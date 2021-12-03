@@ -13,6 +13,8 @@ using System.IO;
 
 namespace MidtermProject.GameMechanics
 {
+    //this class is for static functions that could need to be called 
+    //from multiple places in the program:
     static class General
     {
         static public async Task ExitGame()
@@ -23,10 +25,10 @@ namespace MidtermProject.GameMechanics
             IO_Global.io.CloseForm();
             
             //Music.AllOff();
-
-        
+                    
         }
 
+        //manages heroes learning new abilities: 
         static public async Task LearnAbility(Hero hero)
         {
             var gs = GameState.CurrentGameState.GetInstance();
@@ -65,11 +67,9 @@ namespace MidtermProject.GameMechanics
             //gs.uow.Complete();
             await IO_Global.io.DisplayText($"{hero.ProperName} learned {LearnableAbilities[choice].Name}.");
         }
-
-
-
-        //not sure why I didn't just have this call the ui itself...
-        //maybe I had a reason. who knows. 
+ 
+        //takes a hero and returns a string that displays all of its info
+        //in an organized manner: 
         public static string DisplayHeroInfo(Hero hero)
         {
             IO_Global.io.ClearScreen();
@@ -103,8 +103,6 @@ namespace MidtermProject.GameMechanics
 
             return retstr;
         }
-
-
 
     }
 }
